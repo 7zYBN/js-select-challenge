@@ -29,3 +29,117 @@
   padding: 0;
   margin-bottom: 1rem;
 }
+
+/* -----------> */
+
+#select {
+  padding: 10px;
+}
+
+.selector-container {
+  width: 400px;
+  height: 50px;
+  background-color: #fff;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+}
+
+
+.label {
+  position: relative;
+  display: inline-block;
+  height: 35px;
+  top: 40px;
+  left: 5px;
+  font-size: 25px;
+  /* -webkit-transition: font-size 1s, color 1s, -webkit-transform 2s; */
+  transition: .2s;
+}
+
+.label:hover {
+  cursor: pointer;
+}
+
+.label.special-style {
+  top: 20px;
+  font-size: 15px;
+  color: #ccc;
+}
+
+.rotate {
+  animation: rotation .2s linear 1 normal forwards;
+}
+
+.rotate-back {
+  animation: back-rotation .2s linear 1 normal forwards;
+}
+
+@keyframes rotation {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(90deg);
+  }
+}
+
+@keyframes back-rotation {
+  from {
+    transform: rotate(90deg);
+  }
+  to {
+    transform: rotate(0deg);
+  }
+}
+
+
+.non-display {
+  display: none;
+}
+
+.visible {
+  height: 180px;
+  box-shadow: 0px 0px 18px 3px black;
+  display: inherit;
+  overflow: auto;
+}
+
+.options::-webkit-scrollbar {
+  display: none;
+}
+
+.selector {
+  border-bottom: solid 1px black;
+}
+
+.selector-container:hover {
+  cursor: pointer;
+}
+
+.selector, .options-item {
+  width: 100%;
+  font-size: 25px;
+  display: flex;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.options-item:hover {
+  background-color: rgb(207, 197, 197);
+}
+
+.loading {
+  display: inherit;
+  animation: loading-rotation 1s infinite;
+}
+
+
+@keyframes loading-rotation {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}

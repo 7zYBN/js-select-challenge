@@ -33,7 +33,7 @@ class Select {
     container.classList.add('selector-container');
     parent.appendChild(container);
 
-    this.elements.container = document.querySelector(container.id);
+    this.elements.container = document.getElementById(container.id);
   }
 
   createSelectorLabel() {
@@ -45,7 +45,7 @@ class Select {
     label.setAttribute('for', this.elementsIDs.containerID);
     parent.appendChild(label);
 
-    this.elements.label = document.querySelector(label.id);
+    this.elements.label = document.getElementById(label.id);
   }
 
   createSelectorField() {
@@ -56,7 +56,7 @@ class Select {
     selectorField.classList.add('selectorField');
     parent.appendChild(selectorField);
 
-    this.elements.selectorField = document.querySelector(selectorField.id);
+    this.elements.selectorField = document.getElementById(selectorField.id);
   }
 
   createArrowImage() {
@@ -68,7 +68,18 @@ class Select {
     arrow.setAttribute('src', 'arrow.svg');
     parent.appendChild(arrow);
 
-    this.elements.arrow = document.querySelector(arrow.id);
+    this.elements.arrow = document.getElementById(arrow.id);
+  }
+
+  createOptionsContainer() {
+    const options = document.createElement('div');
+    const parent = document.querySelector(this.selector);
+
+    options.setAttribute('id', 'options');
+    options.classList.add('options', 'non-display');
+    parent.appendChild(options);
+
+    this.elements.options = document.getElementById(options.id);
   }
 
   setSelectorEvents() {

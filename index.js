@@ -5,9 +5,81 @@ class Select {
     this.url = url;
     this.onSelect = onSelect;
 
-    this.setDporDownEvent();
-    this.setButtonsEvents();
+    this.buildSelector();
+
+    this.elements = {};//??
+
+    // this.setDporDownEvent();
+    // this.setButtonsEvents();
   }
+
+  buildSelector() {
+    this.createTemplate();
+    this.setSelectorEvents();
+  }
+
+  createTemplate() {
+    this.createSelectorContainer();
+    this.createSelectorLabel();
+    this.createSelectorField();
+    this.createArrowImage();
+  }
+
+  createSelectorContainer() {
+    const container = document.createElement('div');
+    const parent = document.querySelector(this.selector);
+
+    container.setAttribute('id', 'selector-container');
+    container.classList.add('selector-container');
+    parent.appendChild(container);
+
+    this.elements.container = document.querySelector(container.id);
+  }
+
+  createSelectorLabel() {
+    const label = document.createElement('label');
+    const parent = document.getElementById(this.elementsIDs.containerID);
+
+    label.setAttribute('id', 'label');
+    label.classList.add('label', 'default');
+    label.setAttribute('for', this.elementsIDs.containerID);
+    parent.appendChild(label);
+
+    this.elements.label = document.querySelector(label.id);
+  }
+
+  createSelectorField() {
+    const selectorField = document.createElement('div');
+    const parent = document.getElementById(this.elementsIDs.containerID);
+
+    selectorField.setAttribute('id', 'selectorField');
+    selectorField.classList.add('selectorField');
+    parent.appendChild(selectorField);
+
+    this.elements.selectorField = document.querySelector(selectorField.id);
+  }
+
+  createArrowImage() {
+    const arrow = document.createElement('img');
+    const parent = document.getElementById(this.elementsIDs.containerID);
+
+    arrow.setAttribute('id', 'arrow');
+    arrow.classList.add('default');
+    arrow.setAttribute('src', 'arrow.svg');
+    parent.appendChild(arrow);
+
+    this.elements.arrow = document.querySelector(arrow.id);
+  }
+
+  setSelectorEvents() {
+    this.elements.container.addEventListener('click', this.handleOpen.bind(this));
+    // this.elements.label.addEventListener('click', this.handleOpen.bind(this));
+    // this.elements.label.addEventListener('change', this.handleOpen.bind(this));
+    // document.addEventListener('click', this.handleOpen.bind(this));
+  }
+
+
+  // ------------------------------------------------------          old here
 
   _getData() {
     return fetch(this.url)
@@ -183,3 +255,6 @@ const select = new Select({
     log.innerHTML = `Selected item: ${selectedItem}`;
   }
 })
+
+
+console.log(document.querySelector('#arrow').closest('#select'))

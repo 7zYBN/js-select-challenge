@@ -5,27 +5,26 @@ class Select {
     this.url = url;
     this.onSelect = onSelect;
 
-    this.buildSelector();
+    this._elements = {};
 
-    this.elements = {};//??
-
-    // this.setDporDownEvent();
-    // this.setButtonsEvents();
+    this._buildSelector();
   }
 
-  buildSelector() {
-    this.createTemplate();
+  _buildSelector() {
+    document.querySelector(this.selector).innerHTML = '';
+    this._createTemplate();
     this.setSelectorEvents();
   }
 
-  createTemplate() {
-    this.createSelectorContainer();
-    this.createSelectorLabel();
-    this.createSelectorField();
-    this.createArrowImage();
+  _createTemplate() {
+    this._createSelectorContainer();
+    this._createSelectorLabel();
+    this._createSelectorField();
+    this._createArrowImage();
+    this._createOptionsContainer();
   }
 
-  createSelectorContainer() {
+  _createSelectorContainer() {
     const container = document.createElement('div');
     const parent = document.querySelector(this.selector);
 
@@ -33,227 +32,167 @@ class Select {
     container.classList.add('selector-container');
     parent.appendChild(container);
 
-    this.elements.container = document.getElementById(container.id);
+    this._elements.container = container;
   }
 
-  createSelectorLabel() {
+  _createSelectorLabel() {
     const label = document.createElement('label');
-    const parent = document.getElementById(this.elementsIDs.containerID);
+    const parent = this._elements.container;
 
     label.setAttribute('id', 'label');
-    label.classList.add('label', 'default');
-    label.setAttribute('for', this.elementsIDs.containerID);
+    label.classList.add('label');
+    label.setAttribute('for', parent);
+    label.innerHTML = this.label;
     parent.appendChild(label);
 
-    this.elements.label = document.getElementById(label.id);
+    this._elements.label = label;
   }
 
-  createSelectorField() {
+  _createSelectorField() {
     const selectorField = document.createElement('div');
-    const parent = document.getElementById(this.elementsIDs.containerID);
+    const parent = this._elements.container;
 
     selectorField.setAttribute('id', 'selectorField');
     selectorField.classList.add('selectorField');
     parent.appendChild(selectorField);
 
-    this.elements.selectorField = document.getElementById(selectorField.id);
+    this._elements.selectorField = selectorField;
   }
 
-  createArrowImage() {
+  _createArrowImage() {
     const arrow = document.createElement('img');
-    const parent = document.getElementById(this.elementsIDs.containerID);
+    const parent = this._elements.container;
 
     arrow.setAttribute('id', 'arrow');
-    arrow.classList.add('default');
     arrow.setAttribute('src', 'arrow.svg');
     parent.appendChild(arrow);
 
-    this.elements.arrow = document.getElementById(arrow.id);
+    this._elements.arrow = arrow;
   }
 
-  createOptionsContainer() {
+  _createOptionsContainer() {
     const options = document.createElement('div');
     const parent = document.querySelector(this.selector);
 
     options.setAttribute('id', 'options');
-    options.classList.add('options', 'non-display');
+    options.classList.add('options');
     parent.appendChild(options);
 
-    this.elements.options = document.getElementById(options.id);
-  }
-
-  setSelectorEvents() {
-    this.elements.container.addEventListener('click', this.handleOpen.bind(this));
-    // this.elements.label.addEventListener('click', this.handleOpen.bind(this));
-    // this.elements.label.addEventListener('change', this.handleOpen.bind(this));
-    // document.addEventListener('click', this.handleOpen.bind(this));
-  }
-
-
-  // ------------------------------------------------------          old here
-
-  _getData() {
-    return fetch(this.url)
-      .then(response => response.json())
-      .then(items => {
-        this._createOptions(items);
-        document.querySelector('.selector').innerHTML = '';
-      });
+    this._elements.options = options;
   }
 
   _createLoadingArrows() {
-    const selector = document.querySelector('.selector');
-    const img = document.createElement('img');
-    img.setAttribute('id', 'loading');
-    img.setAttribute('class', 'loading');
-    img.setAttribute('src', 'loading.svg');
-    selector.appendChild(img);
-  }
+    const loadingArrows = document.createElement('img');
+    const parent = this._elements.selectorField;
 
-  _open() {
-    const arrow = document.querySelector('#arrow');
-    const label = document.querySelector('#label');
-    const log = document.querySelector('#log');
-    const optionsList = document.querySelector('.options');
-    arrow.classList.add('rotate');
-    arrow.classList.remove('rotate-back');
-    arrow.classList.remove('default');
+    loadingArrows.setAttribute('id', 'loading');
+    loadingArrows.setAttribute('class', 'loading');
+    loadingArrows.setAttribute('src', 'loading.svg');
+    parent.appendChild(loadingArrows);
 
-    if (!optionsList.hasChildNodes()) {
-      this._createLoadingArrows();
-      this._getData();
-    } else {
-      optionsList.classList.remove('non-display');
-      optionsList.classList.add('visible');
-    }
-
-    if (!log.hasChildNodes()) {
-      label.classList.add('special-style');
-    }
-  }
-
-  _close() {
-    const arrow = document.querySelector('#arrow');
-    const label = document.querySelector('#label');
-    const log = document.querySelector('#log');
-    const optionsList = document.querySelector('.options');
-    arrow.classList.add('rotate-back');
-    arrow.classList.remove('rotate');
-
-    optionsList.classList.add('non-display');
-    optionsList.classList.remove('visible');
-
-    if (!log.hasChildNodes()) {
-      label.classList.remove('special-style');
-    }
-  }
-
-  _set() {
-    return 5;
-  }
-
-  _get() {
-    const log = document.querySelector('#log');
-    const optionsList = document.querySelector('.options');
-
-    if (!optionsList.hasChildNodes()) {
-      this.onSelect('No data for select item')
-    } else {
-      this._changeLabelStyle();
-      optionsList.children[this._set()].onclick();
-    }
-  }
-
-  _changeArrowStyle() {
-    const arrow = document.querySelector('#arrow');
-
-    if (arrow.classList.contains('default')) {
-      arrow.classList.remove('default');
-      arrow.classList.add('rotate');
-    } else {
-      arrow.classList.toggle('rotate');
-      arrow.classList.toggle('rotate-back');
-    }
-  }
-
-  _changeLabelStyle() {
-    const label = document.querySelector('#label');
-    
-    label.classList.toggle('special-style');
-  }
-
-  changeStylesOfSelector() {
-    const log = document.querySelector('#log');
-
-    if (!log.hasChildNodes()) {
-      this._changeLabelStyle();
-    }
-    
-    this._changeArrowStyle();
-  }
-
-  _selectorHandle() {
-    const optionsList = document.querySelector('.options');
-
-    if (!optionsList.hasChildNodes()) {
-      this._createLoadingArrows();
-      this._getData();
-    } else {
-      this._changeBlockVisible(optionsList);
-    }
-    
-    this.changeStylesOfSelector();
-  }
-
-  setDporDownEvent() {
-    const labelOfSelector = document.querySelector('#label');
-    const containerOfSelector = document.querySelector('#selector-container');
-
-    labelOfSelector.onclick = this._selectorHandle.bind(this);
-    containerOfSelector.onclick = this._selectorHandle.bind(this);
-  }
-
-  setButtonsEvents() {
-    document.querySelector('[data-type = open]').onclick = this._open.bind(this);
-    document.querySelector('[data-type = close]').onclick = this._close.bind(this);
-    document.querySelector('[data-type = set]').onclick = this._set.bind(this);
-    document.querySelector('[data-type = get]').onclick = this._get.bind(this);
-    // document.querySelector('[data-type = clear]').onclick = this._clear.bind(this);
-    // document.querySelector('[data-type = destroy]').onclick = this._destroy.bind(this);
-  }
-
-  _changeBlockVisible(block) {
-    block.classList.toggle('non-display');
-    block.classList.toggle('visible');
+    this._elements.loadingArrows = loadingArrows;
   }
 
   _createOptions(optionsObject) {
-
-    const optionsList = document.querySelector('.options');
     const optionsArray = Object.values(optionsObject);
     const optionsIDs = Object.keys(optionsObject);
     
     for (let i = 0; i < optionsArray.length; i++) {
-      let option = document.createElement('div');
+      const option = document.createElement('div');
 
       option.classList.add('options-item');
-      option.setAttribute('data-id',optionsIDs[i]);
+      option.setAttribute('data-id', optionsIDs[i]);
       option.innerHTML = optionsArray[i].label;
+      this._elements.options.appendChild(option);
+  
+      option.onclick = this._optionClickHandle.bind(this, option);
+    }
+  }
 
-      option.onclick = () => {
-        const selector = document.querySelector('.selector');
-        
-        selector.innerHTML = option.innerHTML;
-        this.onSelect(selector.innerHTML);
-        this._changeBlockVisible(optionsList);
+  _optionClickHandle(target) {
+    console.log(target,'option click')
+    const options = [...this._elements.options.children];
+    options.forEach(option => {
+      option.classList.remove('selected');
+    });
 
-        this.changeStylesOfSelector();
-      }
+    target.classList.add('selected');
+    this._elements.label.classList.add('selected');
+    this._elements.label.classList.add('special-style');
+    this._elements.selectorField.innerHTML = target.innerHTML;
+    this.onSelect(this._elements.selectorField.innerHTML);
 
-      optionsList.appendChild(option);
+    this._closeSelectorHandle(event);
+  }
+
+  async _getData() {
+    const response = await fetch(this.url);
+    return response.json();
+  }
+
+  setSelectorEvents() {
+    this._elements.container.onclick = this._openSelectorHandle.bind(this);
+    document.onclick = this._closeSelectorHandle.bind(this);
+  }
+
+  async _openSelectorHandle() {
+    console.log('open click')
+    this._elements.arrow.classList.remove('rotate-back');
+    this._elements.arrow.classList.add('rotate');
+
+    this._elements.label.classList.add('special-style');
+
+
+    if (!this._elements.options.hasChildNodes()) {
+      this._createLoadingArrows();
+
+      const optionsObject = await this._getData();
+
+      this._createOptions(optionsObject);
+      this._elements.selectorField.innerHTML = '';
     }
 
-    this._changeBlockVisible(optionsList);
+    this._elements.options.classList.add('show');
+  }
+
+  _closeSelectorHandle(event) {
+    console.log(event,'close click')
+    if (!event.target.closest(`#${this._elements.container.id}`)) {
+      this._elements.options.classList.remove('show');
+
+      if (!this._elements.selectorField.hasChildNodes()) {
+        this._elements.label.classList.remove('special-style');
+      }
+      
+      if (this._elements.arrow.classList.contains('rotate')) {
+        this._elements.arrow.classList.remove('rotate');
+        this._elements.arrow.classList.add('rotate-back');
+      }
+    }
+  }
+
+  _set(index) {
+    if (this._elements.options.hasChildNodes()) {
+      this._elements.options.children[index].onclick(this._elements.options.children[index]);
+    }
+  }
+
+  _get() {
+    if (this._elements.selectorField.hasChildNodes()) {
+      const options = [...this._elements.options.children];
+      const option = options.find(option => this._elements.selectorField.innerHTML === option.innerHTML);
+      return alert(JSON.stringify({label: option.innerHTML, id: option.dataset.id}));
+    }
+  }
+
+  _clear() {
+    this._elements.label.classList.remove('selected', 'special-style');
+    this._elements.selectorField.innerHTML = '';
+    this._closeSelectorHandle(event);
+  }
+
+  _destroy() {
+    document.querySelector(this.selector).remove();
   }
 }
 
@@ -267,5 +206,10 @@ const select = new Select({
   }
 })
 
-
-console.log(document.querySelector('#arrow').closest('#select'))
+document.querySelector('[data-type = open]').onclick = () => select._openSelectorHandle();
+document.querySelector('[data-type = close]').onclick = (e) => select._closeSelectorHandle(e);
+const indexFromSetField = document.querySelector('[data-type = set]').innerHTML.match(/(\d+)/)[0];
+document.querySelector('[data-type = set]').onclick = () => select._set(indexFromSetField);
+document.querySelector('[data-type = get]').onclick = () => select._get();
+document.querySelector('[data-type = clear]').onclick = () => select._clear();
+document.querySelector('[data-type = destroy]').onclick = () => select._destroy();

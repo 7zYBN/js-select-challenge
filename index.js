@@ -158,6 +158,7 @@ class Select {
   _closeSelectorHandle(event) {
     console.log(event,'close click')
     if (!event.target.closest(`#${this._elements.container.id}`)) {
+      console.log()
       this._elements.options.classList.remove('show');
 
       if (!this._elements.selectorField.hasChildNodes()) {
@@ -206,7 +207,10 @@ const select = new Select({
   }
 })
 
-document.querySelector('[data-type = open]').onclick = () => select._openSelectorHandle();
+document.querySelector('[data-type = open]').onclick = (e) => {
+  e.stopPropagation();
+  select._openSelectorHandle()
+};
 document.querySelector('[data-type = close]').onclick = (e) => select._closeSelectorHandle(e);
 const indexFromSetField = document.querySelector('[data-type = set]').innerHTML.match(/(\d+)/)[0];
 document.querySelector('[data-type = set]').onclick = () => select._set(indexFromSetField);
